@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities; 
+div.modal-bg::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  
+  div.modal-bg::-webkit-scrollbar-track {
+    display: none !important;
+  }
+  
+  div.modal-bg::-webkit-scrollbar-thumb {
+    display: none !important;
+  }
+  
+  div.modal-bg::-webkit-scrollbar-thumb {
+    display: none !important;
+  }
+  
+  div.modal-bg::-webkit-scrollbar-track-piece {
+    display: none !important;
+  }
+  

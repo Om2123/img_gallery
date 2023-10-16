@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/tars_r1/static/css/main.2ae307dd.css",
+    "main.js": "/tars_r1/static/js/main.f2830553.js",
+    "index.html": "/tars_r1/index.html",
+    "main.2ae307dd.css.map": "/tars_r1/static/css/main.2ae307dd.css.map",
+    "main.f2830553.js.map": "/tars_r1/static/js/main.f2830553.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2ae307dd.css",
+    "static/js/main.f2830553.js"
+  ]
+}

@@ -2,8 +2,7 @@ import axios from "axios";
 import "./index.css";
 import { useEffect, useState } from "react";
 import { Gallery } from "react-grid-gallery";
-import { ThumbnailImage } from 'react-image-gallery';
-
+ 
 
 function App() {
   const [images, setImages] = useState([]);
@@ -84,13 +83,8 @@ function App() {
   const closeImagePopup = () => setSelectedImage();
 
   const setModel = (image) => {
-    let ci;
-    let g = modelImages.map((i) => {
-      if (i.id === image.id) {
-        ci = i;
-      }
-      return ci;
-    })
+    let ci = modelImages.find((i) => i.id === image.id);
+
     openImagePopup(ci);
   }
    

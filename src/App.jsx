@@ -1,11 +1,13 @@
 import axios from "axios";
 import "./index.css";
 import { useEffect, useState } from "react";
+import { Gallery } from "react-grid-gallery";
+import { ThumbnailImage } from 'react-image-gallery';
+
 
 function App() {
-
-
   const [images, setImages] = useState([]);
+  const [modelImages, ModelSetImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,17 +16,29 @@ function App() {
     // Replace 'YOUR_API_KEY' with your actual Unsplash API key
 
     axios
-      .get('https://api.unsplash.com/photos?page=1', {
+      .get('https://api.unsplash.com/photos/random', {
         params: {
-          count: 42, // Number of images you want
+          count: 30, // Number of images you want
         },
         headers: {
           Authorization: `Client-ID ${apiKey}`,
         },
       })
       .then((response) => {
-        setImages(response.data);
-        console.log(response);
+        const imageArray = response.data.map((item) => ({
+          id: item.id,
+          src: item.urls.raw,
+          thumbnail: item.urls.thumb,
+          thumbnailWidth: item.width, // Adjust these dimensions as needed
+          thumbnailHeight: item.height,
+          likes: item.likes,
+          username: item.user.name || item.user.username,
+          caption: item.description || item.alt_description,
+          alt: item.description || item.alt_description,
+
+        }));
+        setImages(imageArray);
+        ModelSetImages(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -43,35 +57,43 @@ function App() {
         },
       })
         .then((res) => {
-          setImages(res.data.results)
-          console.log(res)
+          // setImages(res.data.results)
+          const imageArray = res.data.results.map((item) => ({
+            id: item.id,
+            src: item.urls.raw,
+            thumbnail: item.urls.thumb,
+            thumbnailWidth: item.width, // Adjust these dimensions as needed
+            thumbnailHeight: item.height,
+            likes: item.likes,
+            username: item.user.name || item.user.username,
+            caption: item.description || item.alt_description,
+            alt: item.description || item.alt_description,
+
+          }));
+          setImages(imageArray);
+          ModelSetImages(res.data.results)
+          // console.log(res)
         })
         .catch((err) => console.log(err))
       setSearchQuery("");
     }
 
   }
-  function truncateText(text, maxWords) {
-    // Use regex to split the text into words
-    const words = text.split(/\s+/);
 
-    // If there are fewer words than the maximum, return the original text
-    if (words.length <= maxWords) {
-      return text;
-    }
+  const openImagePopup = (image) => setSelectedImage(image);
+  const closeImagePopup = () => setSelectedImage();
 
-    // Otherwise, take the first `maxWords` words and join them with a space, then add "..."
-    return words.slice(0, maxWords).join(" ") + "...";
+  const setModel = (image) => {
+    let ci;
+    let g = modelImages.map((i) => {
+      if (i.id === image.id) {
+        ci = i;
+      }
+      return ci;
+    })
+    openImagePopup(ci);
   }
-  const openImagePopup = (image) => {
-    setSelectedImage(image);
-  };
-
-  const closeImagePopup = () => {
-    setSelectedImage();
-  };
-
-
+   
   return (
     <div>
       <div className="bg-gray-100 p-4">
@@ -88,29 +110,16 @@ function App() {
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {images.map((image, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md">
-                <img
-                  src={image.urls.thumb}
-                  onClick={() => openImagePopup(image)} // Open the popup on image click
-                  alt={image?.slug}
-                  className="object-cover w-full cursor-pointer"
-                />
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold">{image.user?.name}</h3>
-                  <p className="text-gray-600">
-                    {image.description || image.alt_description
-                      ? truncateText(image.description || image.alt_description, 10)
-                      : "No description available"}
-                  </p>
-                  <div className="flex justify-between mt-2">
-                    <p className="text-gray-500">Uploaded by {image.user?.username}</p>
-                    <p className="text-blue-600">Likes: {image.likes}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+          {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"> */}
+          <div className="">
+
+            <Gallery
+              enableImageSelection={false}
+              images={images}
+              onClick={(index, item, e) => { setModel(item) }}
+               
+
+            />
 
             {/* The Popup Modal */}
             {selectedImage && (
@@ -118,7 +127,7 @@ function App() {
                 <div className=" fixed  bg-black opacity-50" onClick={closeImagePopup}></div>
                 <div className="modal-content bg-white rounded-lg shadow-lg p-4">
                   <img
-                    src={selectedImage.urls.small} // Use regular-sized image
+                    src={selectedImage.urls.raw} // Use regular-sized image
                     alt={selectedImage.alt_description || selectedImage.description}
                     height={selectedImage.height}
                     width={selectedImage.width}
@@ -128,6 +137,7 @@ function App() {
                     <h3 className="text-lg font-semibold mt-4">{selectedImage.user.name}</h3>
                     <p className="text-blue-600 mt-4">Likes: {selectedImage.likes}</p>
                   </div>
+                  <div className="text-lg ">{selectedImage.description || selectedImage.alt_description}</div>
                   <div className="mt-4">
                     <div className="flex items-center">
                       <img
@@ -154,7 +164,7 @@ function App() {
 
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

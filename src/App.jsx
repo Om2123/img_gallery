@@ -84,7 +84,6 @@ function App() {
 
   const setModel = (image) => {
     let ci = modelImages.find((i) => i.id === image.id);
-
     openImagePopup(ci);
   }
    

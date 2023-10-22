@@ -2,7 +2,7 @@ import axios from "axios";
 import "./index.css";
 import { useEffect, useState } from "react";
 import { Gallery } from "react-grid-gallery";
- 
+
 
 function App() {
   const [images, setImages] = useState([]);
@@ -86,7 +86,7 @@ function App() {
     let ci = modelImages.find((i) => i.id === image.id);
     openImagePopup(ci);
   }
-   
+
   return (
     <div>
       <div className="bg-gray-100 p-4">
@@ -110,7 +110,7 @@ function App() {
               enableImageSelection={false}
               images={images}
               onClick={(index, item, e) => { setModel(item) }}
-               
+
 
             />
 
@@ -148,7 +148,7 @@ function App() {
                     onClick={closeImagePopup}
                     className="block mx-auto mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
                   >
-                    X
+                    close
                   </button>
                 </div>
               </div>

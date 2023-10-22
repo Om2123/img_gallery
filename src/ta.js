@@ -11,13 +11,9 @@ function accum(s) {
     d = "-";
   for (var i = 0; i < s.length; i++) {
     let a = s[i];
-
     let temp = a.toUpperCase();
     for (var j = 0; j < i; j++) {
-      //   if (j != 0) a = a.toUpperCase();
-      // a.toUpperCase();
       temp += a;
-      //   console.log(temp);
     }
     if (i != s.length - 1) temp += d;
     ans += temp;
